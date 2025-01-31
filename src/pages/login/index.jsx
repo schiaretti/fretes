@@ -34,7 +34,7 @@ function Login() {
                 alert("Erro ao obter token");
                 return;
               }
-              console.log("Token recebido:", token); // 
+ console.log("Token recebido:", token); // 
             localStorage.setItem('token', token)
 
             navigate('/logistica')
