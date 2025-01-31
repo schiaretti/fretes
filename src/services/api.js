@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://bdsaulo-8ekb874h0-schiarettis-projects.vercel.app",
+  baseURL: "https://bdsaulo.vercel.app/",
 });
 
 // Interceptador para adicionar o token JWT automaticamente
