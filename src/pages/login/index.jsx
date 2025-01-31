@@ -30,6 +30,11 @@ function Login() {
                 senha: senhaRef.current.value
             })
 
+            if (!token) {
+                alert("Erro ao obter token");
+                return;
+              }
+
             localStorage.setItem('token', token)
 
             navigate('/logistica')
