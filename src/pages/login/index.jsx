@@ -13,8 +13,8 @@ function Login() {
 
     const email = emailRef.current.value;
     const senha = senhaRef.current.value;
-    console.log("emailRef.current.value")
-    console.log("senhaRef.current.value")
+    console.log("emailRef")
+    console.log("senhaRef")
 
     // Verificando se os campos estão preenchidos
     if (!email || !senha) {
