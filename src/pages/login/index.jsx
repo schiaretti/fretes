@@ -7,6 +7,9 @@ function Login() {
   const senhaRef = useRef();
   const navigate = useNavigate();
 
+  console.log("emailRef:", emailRef);
+  console.log("senhaRef:", senhaRef);
+
   // Função para lidar com o envio do formulário
   async function handleSubmit(event) {
     event.preventDefault();
