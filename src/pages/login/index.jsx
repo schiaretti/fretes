@@ -26,19 +26,9 @@ function Login() {
       // Fazendo a requisição para o backend
       const { data } = await api.post("/login", { email, senha });
 
-      // Verificando se a resposta contém o token
-      const token = data.token;
-      if (!token) {
-        alert("Erro ao obter token.");
-        return;
-      }
+          
 
-      console.log("Token recebido:", token); // Exibe o token no console
-
-      // Armazenando o token no localStorage
-      localStorage.setItem("token", token);
-
-      // Redirecionando para a página de logística
+         // Redirecionando para a página de logística
       navigate("/logistica");
 
     } catch (err) {
