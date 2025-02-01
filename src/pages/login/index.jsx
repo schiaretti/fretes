@@ -7,8 +7,7 @@ function Login() {
   const senhaRef = useRef();
   const navigate = useNavigate();
 
-  console.log("emailRef:", emailRef);
-  console.log("senhaRef:", senhaRef);
+ 
 
   // Função para lidar com o envio do formulário
   async function handleSubmit(event) {
@@ -16,8 +15,8 @@ function Login() {
 
     const email = emailRef.current.value;
     const senha = senhaRef.current.value;
-    console.log("emailRef")
-    console.log("senhaRef")
+    console.log("Valor de emailRef:", email);
+    console.log("Valor de senhaRef:", senha);
 
     // Verificando se os campos estão preenchidos
     if (!email || !senha) {
