@@ -16,7 +16,7 @@ function App() {
     </header>
 
       <Routes>
-        <Route path='/cadastro-usuario'element={<Cadastro/>}/>
+        <Route path='/cadastro'element={<Cadastro/>}/>
         <Route path='/'element={<Login/>}/>
         <Route path='/logistica'element={<Logistica/>}/>
       </Routes>

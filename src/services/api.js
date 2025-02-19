@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-   baseURL:"sauloapi-production.up.railway.app",
+   baseURL:"https://sauloapi-production-0262.up.railway.app/",
 
 });
 
