@@ -19,7 +19,7 @@ function Logistica() {
     setIsSubmitting(true);
 
     try {
-      await api.post("/logistica", {
+      await api.post("/cadastro-fretes", {
         usuario: usuarioRef.current.value,
         cliente: clienteRef.current.value,
         cidorigem: cidorigemRef.current.value,
