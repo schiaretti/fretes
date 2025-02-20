@@ -19,70 +19,76 @@ function Logistica() {
     setIsSubmitting(true);
 
     try {
-      await api.post("/cadastro-fretes", {
-        usuario: usuarioRef.current.value,
-        cliente: clienteRef.current.value,
-        cidorigem: cidorigemRef.current.value,
-        ciddestino: ciddestinoRef.current.value,
-        freteemp: freteempRef.current.value,
-        fretemot: fretemotRef.current.value,
-        produto: produtoRef.current.value,
-        veiculo: veiculoRef.current.value,
-      });
+        await api.post("/cadastro-fretes", {
+            usuario: usuarioRef.current.value,
+            cliente: clienteRef.current.value,
+            cidorigem: cidorigemRef.current.value,
+            ciddestino: ciddestinoRef.current.value,
+            freteemp: freteempRef.current.value,
+            fretemot: fretemotRef.current.value,
+            produto: produtoRef.current.value,
+            veiculo: veiculoRef.current.value,
+        });
 
-      console.log("Frete cadastrado com sucesso!");
+        console.log("Frete cadastrado com sucesso!");
 
-      // Limpar campos
-      [
-        usuarioRef,
-        clienteRef,
-        cidorigemRef,
-        ciddestinoRef,
-        freteempRef,
-        fretemotRef,
-        produtoRef,
-        veiculoRef,
-      ].forEach((ref) => (ref.current.value = ""));
+        // Limpar campos
+        [
+            usuarioRef,
+            clienteRef,
+            cidorigemRef,
+            ciddestinoRef,
+            freteempRef,
+            fretemotRef,
+            produtoRef,
+            veiculoRef,
+        ].forEach((ref) => (ref.current.value = ""));
+
+        // Atualiza a lista de fretes após cadastrar
+        getFretes();
     } catch (err) {
-      console.error("Erro ao cadastrar frete:", err);
+        console.error("Erro ao cadastrar frete:", err);
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
-  }
+}
 
-  const [fretes, setfretes] = useState([])
+const [fretes, setFretes] = useState([]);
 
-  async function getFretes() {
+async function getFretes() {
     try {
-      const response = await api.get('/listar-fretes');
-      console.log('Resposta completa da API:', response.data);
+        const response = await api.get('/listar-fretes');
+        console.log('Resposta completa da API:', response.data);
 
-      // Ajustar para acessar a chave correta "fretes" na resposta
-      setfretes(response.data.fretes);
+        setFretes(response.data.fretes); // Atualiza a lista
     } catch (error) {
-      console.error('Erro ao buscar fretes:', error);
+        console.error('Erro ao buscar fretes:', error);
     }
-  }
+}
 
-  useEffect(() => {
-    getFretes()
-  }, [])
+// Busca os fretes ao carregar a página
+useEffect(() => {
+    getFretes();
+}, []);
 
-  async function deleteFretes(id) {
+async function deleteFretes(id) {
     try {
-      const confirmDelete = window.confirm("Tem certeza que deseja excluir este frete?");
-      if (confirmDelete) {
-        await api.delete(`/logistica/${id}`);
-        console.log("Frete excluído com sucesso!");
-      } else {
-        console.log("Exclusão cancelada pelo usuário.");
-      }
-    } catch (error) {
-      console.error("Erro ao deletar logística!", error);
-    }
-  }
+        const confirmDelete = window.confirm("Tem certeza que deseja excluir este frete?");
+        if (confirmDelete) {
+            await api.delete(`/logistica/${id}`);
+            console.log("Frete excluído com sucesso!");
 
-  const usuarioLogado = localStorage.getItem("");  // Armazenado no localStorage após o login
+            // Atualiza a lista após exclusão
+            getFretes();
+        } else {
+            console.log("Exclusão cancelada pelo usuário.");
+        }
+    } catch (error) {
+        console.error("Erro ao deletar logística!", error);
+    }
+}
+
+const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage após o login
 
 
 
