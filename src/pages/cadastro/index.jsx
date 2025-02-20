@@ -13,7 +13,7 @@ function Cadastro() {
         event.preventDefault()
 
         try {
-            await api.post('/cadastro', {
+            await api.post('/cadastro-usuario', {
                 nome: nomeRef.current.value,
                 email: emailRef.current.value,
                 senha: senhaRef.current.value
