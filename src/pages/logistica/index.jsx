@@ -227,10 +227,12 @@ const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage ap
                   <p className="font-semibold ">Cliente: <span className="font-serif">{frete.cliente}</span></p>
                   <p className="font-semibold ">Origem: <span className="font-serif">{frete.cidorigem}</span></p>
                   <p className="font-semibold ">Destino: <span className="font-serif">{frete.ciddestino}</span></p>
-                  <p className="font-semibold ">Frete Empresa: <span className="font-serif">{frete.freteemp}</span></p>
-                  <p className="font-semibold ">Frete Motorista: <span className="font-serif">{frete.fretemot}</span></p>
-                  <p className="font-semibold ">Produto: <span className="font-serif">{frete.produto}</span></p>
-                  <p className="font-semibold ">Veículo: <span className="font-serif">{frete.veiculo}</span></p>
+                  <p className="font-semibold ">Tonelada Saída: <span className="font-serif">{frete.tonsaida}</span></p>
+                  <p className="font-semibold ">Tonelada Chegada: <span className="font-serif">{frete.tonchegada}</span></p>
+                  <p className="font-semibold ">Motorista: <span className="font-serif">{frete.motorista}</span></p>
+                  <p className="font-semibold ">Placa: <span className="font-serif">{frete.placa}</span></p>
+                  <p className="font-semibold ">Adiantamento: <span className="font-serif">{frete.adiantamento}</span></p>
+                  <p className="font-semibold ">Saldo: <span className="font-serif">{frete.Saldo}</span></p>
                 </li>
               </ul>
             </div>
