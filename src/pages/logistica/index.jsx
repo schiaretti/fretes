@@ -8,10 +8,12 @@ function Logistica() {
   const clienteRef = useRef();
   const cidorigemRef = useRef();
   const ciddestinoRef = useRef();
-  const freteempRef = useRef();
-  const fretemotRef = useRef();
-  const produtoRef = useRef();
-  const veiculoRef = useRef();
+  const tonsaidaRef = useRef();
+  const tonchegadaRef = useRef();
+  const motoristaRef = useRef();
+  const placaRef = useRef();
+  const adiantamentoRef = useRef();
+  const saldoRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(event) {
@@ -24,10 +26,12 @@ function Logistica() {
             cliente: clienteRef.current.value,
             cidorigem: cidorigemRef.current.value,
             ciddestino: ciddestinoRef.current.value,
-            freteemp: freteempRef.current.value,
-            fretemot: fretemotRef.current.value,
-            produto: produtoRef.current.value,
-            veiculo: veiculoRef.current.value,
+            tonsaidaRef: tonsaidaRef.current.value,
+            tonchegadaRef: tonchegadaRef.current.value,
+            motoristaRef: motoristaRef.current.value,
+            placaRef: placaRef.current.value,
+            adiantamentoRef: adiantamentoRef.current.value,
+            saldoRef: saldoRef.current.value,
         });
 
         console.log("Frete cadastrado com sucesso!");
@@ -38,10 +42,12 @@ function Logistica() {
             clienteRef,
             cidorigemRef,
             ciddestinoRef,
-            freteempRef,
-            fretemotRef,
-            produtoRef,
-            veiculoRef,
+            tonsaidaRef,
+            tonchegadaRef,
+            motoristaRef,
+            placaRef,
+            adiantamentoRef,
+            saldoRef,
         ].forEach((ref) => (ref.current.value = ""));
 
         // Atualiza a lista de fretes após cadastrar
@@ -147,39 +153,55 @@ const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage ap
         <section>
           <h3 className="text-lg font-semibold text-slate-700 mb-2">Frete</h3>
           <input
-            ref={freteempRef}
-            placeholder="Frete Empresa"
+            ref={tonsaidaRef}
+            placeholder="Tonelada saída"
             type="text"
             className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Frete Empresa"
+            aria-label="Tonelada saída"
           />
           <input
-            ref={fretemotRef}
-            placeholder="Frete Motorista"
+            ref={tonchegadaRef}
+            placeholder="Tonelada Chegada"
             type="text"
             className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Frete Motorista"
+            aria-label="Tonelada Chegada"
           />
         </section>
 
         <section>
           <h3 className="text-lg font-semibold text-slate-700 mb-2">Informações Adicionais</h3>
           <input
-            ref={produtoRef}
-            placeholder="Produto"
+            ref={motoristaRef}
+            placeholder="Nome Motorista"
             type="text"
             className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Produto"
+            aria-label="Nome Motorista"
           />
           <input
-            ref={veiculoRef}
-            placeholder="Veículo"
+            ref={placaRef}
+            placeholder="Placa Veículo"
             type="text"
             className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Veículo"
+            aria-label="Placa Veículo"
           />
         </section>
-
+        <section>
+        <h3 className="text-lg font-semibold text-slate-700 mb-2">Informações de valores</h3>
+        <input
+            ref={adiantamentoRef}
+            placeholder="Adiantamento"
+            type="text"
+            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
+            aria-label="Adiantamento"
+          />
+           <input
+            ref={saldoRef}
+            placeholder="Saldo"
+            type="text"
+            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
+            aria-label="Saldo"
+          />
+        </section>
         <button
           type="submit"
           className={`w-full py-3 rounded-md font-medium text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:ring-sky-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
