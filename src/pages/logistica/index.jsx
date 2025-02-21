@@ -62,15 +62,17 @@ function Logistica() {
 const [fretes, setFretes] = useState([]);
 
 async function getFretes() {
-    try {
-        const response = await api.get('/listar-fretes');
-        console.log('Resposta completa da API:', response.data);
+  try {
+      const response = await api.get('/listar-fretes');
+      console.log('Resposta completa da API:', response.data);
 
-        setFretes(response.data.fretes); // Atualiza a lista
-    } catch (error) {
-        console.error('Erro ao buscar fretes:', error);
-    }
+      setFretes(response.data.fretes || []); // ✅ Garante que fretes seja um array, mesmo que vazio
+  } catch (error) {
+      console.error('Erro ao buscar fretes:', error);
+      setFretes([]); // ✅ Evita erro caso a API falhe
+  }
 }
+
 
 // Busca os fretes ao carregar a página
 useEffect(() => {
