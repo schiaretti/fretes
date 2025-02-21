@@ -151,7 +151,7 @@ const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage ap
         </section>
 
         <section>
-          <h3 className="text-lg font-semibold text-slate-700 mb-2">Frete</h3>
+          <h3 className="text-lg font-semibold text-slate-700 mb-2">Dados do peso</h3>
           <input
             ref={tonsaidaRef}
             placeholder="Tonelada saída"
@@ -169,7 +169,7 @@ const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage ap
         </section>
 
         <section>
-          <h3 className="text-lg font-semibold text-slate-700 mb-2">Informações Adicionais</h3>
+          <h3 className="text-lg font-semibold text-slate-700 mb-2">Informações do Motorista</h3>
           <input
             ref={motoristaRef}
             placeholder="Nome Motorista"
