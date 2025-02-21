@@ -232,7 +232,7 @@ const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage ap
                   <p className="font-semibold ">Motorista: <span className="font-serif">{frete.motorista}</span></p>
                   <p className="font-semibold ">Placa: <span className="font-serif">{frete.placa}</span></p>
                   <p className="font-semibold ">Adiantamento: <span className="font-serif">{frete.adiantamento}</span></p>
-                  <p className="font-semibold ">Saldo: <span className="font-serif">{frete.Saldo}</span></p>
+                  <p className="font-semibold ">Saldo: <span className="font-serif">{frete.saldo}</span></p>
                 </li>
               </ul>
             </div>
