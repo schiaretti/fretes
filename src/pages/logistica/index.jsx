@@ -66,7 +66,8 @@ async function getFretes() {
       const response = await api.get('/listar-fretes');
       console.log('Resposta completa da API:', response.data);
 
-      setFretes(response.data.fretes || []); // ✅ Garante que fretes seja um array, mesmo que vazio
+      setFretes(Array.isArray(response.data) ? response.data : []);
+
   } catch (error) {
       console.error('Erro ao buscar fretes:', error);
       setFretes([]); // ✅ Evita erro caso a API falhe
