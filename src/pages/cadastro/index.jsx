@@ -7,6 +7,8 @@ function Cadastro() {
     const nomeRef = useRef()
     const emailRef = useRef()
     const senhaRef = useRef()
+    const telefoneRef = useRef()
+    const cpfRef = useRef()
 
 
     async function handleSubmit(event) {
@@ -16,10 +18,13 @@ function Cadastro() {
             await api.post('/cadastro-usuario', {
                 nome: nomeRef.current.value,
                 email: emailRef.current.value,
-                senha: senhaRef.current.value
+                senha: senhaRef.current.value,
+                telefone: telefoneRef.current.value,
+                cpf: cpfRef.current.value
             })
             alert('Usuário cadastrado com sucesso!')
         } catch (err) {
+            console.error('Erro ao cadastrar usuário:', err)
             alert('Erro ao cadastrar usuário!')
         }
   
@@ -32,6 +37,8 @@ function Cadastro() {
                 <input ref={nomeRef} placeholder="Nome" type="text" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none hover:bg-slate-200" />
                 <input ref={emailRef} placeholder="Email" type="email" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none hover:bg-slate-200" />
                 <input ref={senhaRef} placeholder="Senha" type="password" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" />
+                <input ref={telefoneRef} placeholder="Telefone" type="text" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" />
+                <input ref={cpfRef} placeholder="CPF" type="text" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none" />
                 <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-md  hover:bg-blue-400 font-bold">Cadastre-se</button>
             </form>
             <Link to="/" className="text-gray-900 hover:underline mt-4 block text-center">Já tem uma conta?Faça login</Link>
