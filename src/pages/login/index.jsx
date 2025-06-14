@@ -1,70 +1,77 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useRef } from "react";
-import api from "../../services/api";
+import { Link, useNavigate } from "react-router-dom"
+import { useRef } from "react"
+import { useAuth } from "../../AuthContext/AuthContext.jsx"
 
 function Login() {
-  const emailRef = useRef();
-  const senhaRef = useRef();
-  const navigate = useNavigate();
+  const emailRef = useRef()
+  const senhaRef = useRef()
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
- 
-
-  // Função para lidar com o envio do formulário
   async function handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault()
 
-    const email = emailRef.current.value;
-    const senha = senhaRef.current.value;
-    console.log("Valor de emailRef:", email);
-    console.log("Valor de senhaRef:", senha);
+    const email = emailRef.current.value
+    const senha = senhaRef.current.value
 
-    // Verificando se os campos estão preenchidos
     if (!email || !senha) {
-      alert("Por favor, preencha todos os campos.");
-      return;
+      alert("Por favor, preencha todos os campos.")
+      return
     }
 
     try {
-      // Fazendo a requisição para o backend
-      const { data } = await api.post("/login", { email, senha });
-
-          
-
-         // Redirecionando para a página de logística
-      navigate("/logistica");
-
+      await login(email, senha)
+      navigate("/logistica")
     } catch (err) {
-      // Exibindo erro detalhado no console e mensagem de erro para o usuário
-      console.error("Erro ao fazer login:", err);
-      alert("Usuário ou senha inválidos!");
+      console.error("Erro ao fazer login:", err)
+      alert(err.response?.data?.message || "Usuário ou senha inválidos!")
     }
   }
 
   return (
-    <div className="max-w-md mx-auto mt-10 bg-slate-500 p-8 border border-slate-400 rounded-lg shadow-lg">
+    <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Login</h2>
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-        <input
-          ref={emailRef}
-          placeholder="Email"
-          type="email"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none hover:bg-slate-200"
-        />
-        <input
-          ref={senhaRef}
-          placeholder="Senha"
-          type="password"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
-        />
-        <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-400 font-bold">
-          Login
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            id="email"
+            ref={emailRef}
+            type="email"
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <div>
+          <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+          <input
+            id="senha"
+            ref={senhaRef}
+            type="password"
+            required
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <button 
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-medium transition-colors"
+        >
+          Entrar
         </button>
       </form>
-      <Link to="/cadastro-usuario" className="text-gray-900 hover:underline mt-4 block text-center">
-        Não tem uma conta? Cadastre-se
-      </Link>
+      
+      <div className="mt-4 text-center">
+        <Link 
+          to="/cadastro-usuario" 
+          className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+        >
+          Não tem uma conta? Cadastre-se
+        </Link>
+      </div>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default Login

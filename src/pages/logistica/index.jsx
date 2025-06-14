@@ -1,253 +1,200 @@
-import React, { useRef, useState, useEffect } from "react";
-import api from "../../services/api";
-import Trash from '../../assets/lixo.svg'
-
+import { useAuth } from '../../AuthContext/AuthContext.jsx'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { FaBars, FaTimes, FaTruck, FaCar, FaPlusCircle, FaUserCog, FaSignOutAlt } from 'react-icons/fa'
 
 function Logistica() {
-  const usuarioRef = useRef();
-  const clienteRef = useRef();
-  const cidorigemRef = useRef();
-  const ciddestinoRef = useRef();
-  const tonsaidaRef = useRef();
-  const tonchegadaRef = useRef();
-  const motoristaRef = useRef();
-  const placaRef = useRef();
-  const adiantamentoRef = useRef();
-  const saldoRef = useRef();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+  const [menuOpen, setMenuOpen] = useState(false)
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-        await api.post("/cadastro-fretes", {
-            usuario: usuarioRef.current.value,
-            cliente: clienteRef.current.value,
-            cidorigem: cidorigemRef.current.value,
-            ciddestino: ciddestinoRef.current.value,
-            tonsaida: tonsaidaRef.current.value,
-            tonchegada: tonchegadaRef.current.value,
-            motorista: motoristaRef.current.value,
-            placa: placaRef.current.value,
-            adiantamento: adiantamentoRef.current.value,
-            saldo: saldoRef.current.value,
-        });
-
-        console.log("Frete cadastrado com sucesso!");
-
-        // Limpar campos
-        [
-            usuarioRef,
-            clienteRef,
-            cidorigemRef,
-            ciddestinoRef,
-            tonsaidaRef,
-            tonchegadaRef,
-            motoristaRef,
-            placaRef,
-            adiantamentoRef,
-            saldoRef,
-        ].forEach((ref) => (ref.current.value = ""));
-
-        // Atualiza a lista de fretes após cadastrar
-        getFretes();
-  
-      } catch (err) {
-        console.error("Erro ao cadastrar frete:", err);
-    } finally {
-        setIsSubmitting(false);
-    }
-}
-
-const [fretes, setFretes] = useState([]);
-
-async function getFretes() {
-  try {
-      const response = await api.get('/listar-fretes');
-      console.log('Resposta completa da API:', response.data);
-
-      setFretes(response.data.fretes || []); // ✅ Garante que fretes seja um array, mesmo que vazio
-  } catch (error) {
-      console.error('Erro ao buscar fretes:', error);
-      setFretes([]); // ✅ Evita erro caso a API falhe
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen)
   }
-}
-
-
-// Busca os fretes ao carregar a página
-useEffect(() => {
-    getFretes();
-}, []);
-
-async function deleteFretes(id) {
-    try {
-        const confirmDelete = window.confirm("Tem certeza que deseja excluir este frete?");
-        if (confirmDelete) {
-            await api.delete(`/logistica/${id}`);
-            console.log("Frete excluído com sucesso!");
-
-            // Atualiza a lista após exclusão
-            getFretes();
-        } else {
-            console.log("Exclusão cancelada pelo usuário.");
-        }
-    } catch (error) {
-        console.error("Erro ao deletar logística!", error);
-    }
-}
-
-//const usuarioLogado = localStorage.getItem(""); // Armazenado no localStorage após o login
-
-
 
   return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-blue-900 text-white shadow-md">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <h1 className="text-xl md:text-2xl font-bold">Sistema de Fretes</h1>
+          
+          {/* Botão Mobile */}
+          <button 
+            onClick={toggleMenu}
+            className="md:hidden text-white focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+          
+          {/* Desktop - Info usuário e logout */}
+          <div className="hidden md:flex items-center space-x-4">
+            <span className="text-sm md:text-base">
+              {user?.nome} ({user?.nivel})
+            </span>
+            <button 
+              onClick={logout}
+              className="flex items-center bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition-colors"
+              title="Sair"
+            >
+              <FaSignOutAlt className="mr-1" />
+              <span className="hidden md:inline">Sair</span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-    <div className="flex flex-col max-w-2xl mx-auto mt-5 bg-white p-8 border border-gray-200 rounded-md shadow-lg items-center">
+      {/* Container Principal */}
+      <div className="container mx-auto px-4 py-6 flex flex-col md:flex-row">
+        {/* Sidebar Mobile (aparece sobre o conteúdo) */}
+        {menuOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div 
+              className="absolute inset-0 bg-black bg-opacity-50"
+              onClick={toggleMenu}
+            ></div>
+            <div className="absolute left-0 top-0 h-full w-3/4 bg-white shadow-lg">
+              <div className="p-4 border-b">
+                <div className="flex justify-between items-center">
+                  <h2 className="font-bold text-lg">Menu</h2>
+                  <button onClick={toggleMenu}>
+                    <FaTimes />
+                  </button>
+                </div>
+                <div className="mt-2 text-sm">
+                  Logado como: <span className="font-medium">{user?.nome}</span>
+                </div>
+              </div>
+              
+              <nav className="p-4">
+                <ul className="space-y-2">
+                  <NavItem 
+                    to="fretes" 
+                    icon={<FaTruck />} 
+                    label="Fretes Disponíveis" 
+                    onClick={toggleMenu}
+                  />
+                  <NavItem 
+                    to="veiculos" 
+                    icon={<FaCar />} 
+                    label="Meus Veículos" 
+                    onClick={toggleMenu}
+                  />
+                  <NavItem 
+                    to="cadastro-veiculo" 
+                    icon={<FaPlusCircle />} 
+                    label="Cadastrar Veículo" 
+                    onClick={toggleMenu}
+                  />
+                  {user?.nivel === 'ADMIN' && (
+                    <NavItem 
+                      to="admin" 
+                      icon={<FaUserCog />} 
+                      label="Painel Admin" 
+                      onClick={toggleMenu}
+                    />
+                  )}
+                </ul>
+                
+                <button 
+                  onClick={() => {
+                    logout()
+                    toggleMenu()
+                  }}
+                  className="mt-6 w-full flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition-colors"
+                >
+                  <FaSignOutAlt className="mr-2" />
+                  Sair
+                </button>
+              </nav>
+            </div>
+          </div>
+        )}
 
-      <h2 className="flex flex-col max-w-2xl mx-auto font-bold text-center border border-gray-200 bg-slate-200 p-8 text-2xl rounded-md shadow-lg">
-        Cadastro de Fretes
-      </h2>
+        {/* Sidebar Desktop (sempre visível) */}
+        <aside className="hidden md:block md:w-64 bg-white rounded-lg shadow-md p-4 mr-6 h-fit">
+          <div className="mb-6 p-2 border-b">
+            <h2 className="font-bold text-lg">Bem-vindo</h2>
+            <p className="text-sm text-gray-600">
+              {user?.nome} ({user?.nivel})
+            </p>
+          </div>
+          
+          <nav>
+            <ul className="space-y-1">
+              <NavItem 
+                to="fretes" 
+                icon={<FaTruck />} 
+                label="Fretes Disponíveis" 
+              />
+              <NavItem 
+                to="veiculos" 
+                icon={<FaCar />} 
+                label="Meus Veículos" 
+              />
+              <NavItem 
+                to="cadastro-veiculo" 
+                icon={<FaPlusCircle />} 
+                label="Cadastrar Veículo" 
+              />
+              {user?.nivel === 'ADMIN' && (
+                <NavItem 
+                  to="admin" 
+                  icon={<FaUserCog />} 
+                  label="Painel Admin" 
+                />
+              )}
+            </ul>
+          </nav>
+        </aside>
 
-      <form
-        className="max-w-2xl flex flex-col gap-6 mt-6 p-6 border rounded-lg bg-white shadow-lg"
-        onSubmit={handleSubmit}
-      >
-        <section>
-          <h3 className="text-lg font-semibold text-slate-700 mb-2">Dados do Usuário</h3>
-          <input
-            ref={usuarioRef}
-            placeholder="Usuário"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none"
-            aria-label="Usuário"
-            required
-          />
-          <input
-            ref={clienteRef}
-            placeholder="Cliente"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none"
-            aria-label="Cliente"
-            required
-          />
-        </section>
-
-        <section>
-          <h3 className="text-lg font-semibold text-slate-700 mb-2">Dados de Logística</h3>
-          <input
-            ref={cidorigemRef}
-            placeholder="Cidade de Origem"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Cidade de Origem"
-            required
-          />
-          <input
-            ref={ciddestinoRef}
-            placeholder="Cidade de Destino"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Cidade de Destino"
-            required
-          />
-        </section>
-
-        <section>
-          <h3 className="text-lg font-semibold text-slate-700 mb-2">Dados do peso</h3>
-          <input
-            ref={tonsaidaRef}
-            placeholder="Tonelada saída"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Tonelada saída"
-          />
-          <input
-            ref={tonchegadaRef}
-            placeholder="Tonelada Chegada"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Tonelada Chegada"
-          />
-        </section>
-
-        <section>
-          <h3 className="text-lg font-semibold text-slate-700 mb-2">Informações do Motorista</h3>
-          <input
-            ref={motoristaRef}
-            placeholder="Nome Motorista"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Nome Motorista"
-          />
-          <input
-            ref={placaRef}
-            placeholder="Placa Veículo"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Placa Veículo"
-          />
-        </section>
-        <section>
-        <h3 className="text-lg font-semibold text-slate-700 mb-2">Informações de valores</h3>
-        <input
-            ref={adiantamentoRef}
-            placeholder="Adiantamento"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Adiantamento"
-          />
-           <input
-            ref={saldoRef}
-            placeholder="Saldo"
-            type="text"
-            className="rounded-md px-3 py-2 border border-slate-300 focus:outline-none "
-            aria-label="Saldo"
-          />
-        </section>
-        <button
-          type="submit"
-          className={`w-full py-3 rounded-md font-medium text-white bg-sky-500 hover:bg-sky-600 focus:ring-4 focus:ring-sky-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Salvando..." : "Salvar"}
-        </button>
-      </form>
-
-      {fretes && fretes.length > 0 ? (
-  fretes.map((frete) => (
-    <div key={frete.id} className="flex flex-col max-w-2xl mx-auto mt-5 bg-gray-100 p-8 border border-gray-200 rounded-md shadow-lg items-center">
-      <h2 className="text-2xl text-center font-bold mb-6 text-gray-950">Lista de Fretes</h2>
-      <div>
-        <ul className="space-y-2">
-          <li>
-            <p className="font-semibold">Usuário: <span className="font-serif">{frete.usuario}</span></p>
-            <p className="font-semibold">Cliente: <span className="font-serif">{frete.cliente}</span></p>
-            <p className="font-semibold">Origem: <span className="font-serif">{frete.cidorigem}</span></p>
-            <p className="font-semibold">Destino: <span className="font-serif">{frete.ciddestino}</span></p>
-            <p className="font-semibold">Tonelada Saída: <span className="font-serif">{frete.tonsaida}</span></p>
-            <p className="font-semibold">Tonelada Chegada: <span className="font-serif">{frete.tonchegada}</span></p>
-            <p className="font-semibold">Motorista: <span className="font-serif">{frete.motorista}</span></p>
-            <p className="font-semibold">Placa: <span className="font-serif">{frete.placa}</span></p>
-            <p className="font-semibold">Adiantamento: <span className="font-serif">{frete.adiantamento}</span></p>
-            <p className="font-semibold">Saldo: <span className="font-serif">{frete.saldo}</span></p>
-          </li>
-        </ul>
+        {/* Conteúdo Principal */}
+        <main className="flex-1">
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            {/* Mobile - Info usuário */}
+            <div className="md:hidden p-4 border-b flex justify-between items-center">
+              <div>
+                <h2 className="font-bold">
+                  {user?.nivel === 'ADMIN' ? 'Painel Admin' : 'Área do Motorista'}
+                </h2>
+                <p className="text-sm text-gray-600">
+                  {user?.nome} ({user?.nivel})
+                </p>
+              </div>
+              <button 
+                onClick={toggleMenu}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <FaBars size={20} />
+              </button>
+            </div>
+            
+            {/* Área de conteúdo dinâmico */}
+            <div className="p-4 md:p-6">
+              <Outlet />
+            </div>
+          </div>
+        </main>
       </div>
-
-      <button
-        className="flex justify-center gap-2 border-none cursor-pointer mt-5 items-center"
-        onClick={() => deleteFretes(frete.id)}
-      >
-        <img src={Trash} alt="Excluir" />
-      </button>
     </div>
-  ))
-) : (
-  <p className="text-center text-gray-600 mt-5">Nenhum frete cadastrado.</p>
-)})
-</div>
   )
 }
-export default Logistica;
+
+// Componente auxiliar para itens de navegação
+function NavItem({ to, icon, label, onClick }) {
+  return (
+    <li>
+      <Link 
+        to={to}
+        onClick={onClick}
+        className="flex items-center p-2 rounded hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors"
+      >
+        <span className="mr-2 text-blue-500">{icon}</span>
+        {label}
+      </Link>
+    </li>
+  )
+}
+
+export default Logistica
