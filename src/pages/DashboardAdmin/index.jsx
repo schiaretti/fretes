@@ -18,10 +18,12 @@ const DashboardAdmin = () => {
 
   // Carrega estatísticas
   useEffect(() => {
+    console.log('Carregando estatísticas...') // Debug
     const carregarEstatisticas = async () => {
       try {
         setLoading(true)
         const response = await api.get('/admin/estatisticas')
+        console.log('Dados recebidos:', response.data) // Debug
         setStats(response.data)
       } catch (error) {
         console.error('Erro ao carregar estatísticas:', error)
@@ -33,6 +35,13 @@ const DashboardAdmin = () => {
 
     carregarEstatisticas()
   }, [])
+
+  const handleNovoFrete = () => {
+    console.log('Navegando para novo-frete...')
+  navigate('/logistica/novo-frete', { 
+   state: { fromDashboard: true } // Adicione state se necessário
+  })
+  }
 
   // Componente para os cards de estatística
   const StatCard = ({ title, value, borderColor, percent }) => (
@@ -58,7 +67,7 @@ const DashboardAdmin = () => {
           <p className="mt-2 text-gray-600">Carregando estatísticas...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <StatCard 
             title="Total de Fretes" 
             value={stats.totalFretes} 
@@ -84,13 +93,18 @@ const DashboardAdmin = () => {
         </div>
       )}
 
-      {/* Botão para novo frete */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Gerenciamento de Fretes</h2>
+      {/* Seção de Gerenciamento - Ajuste responsivo */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-xl font-semibold">Gerenciamento de Fretes</h2>
+            <p className="text-gray-600 mt-1 sm:mt-0">
+              Aqui você pode gerenciar os fretes da plataforma
+            </p>
+          </div>
           <button 
-            onClick={() => navigate('/admin/novo-frete')}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+            onClick={handleNovoFrete}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center w-full sm:w-auto justify-center"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
@@ -100,8 +114,9 @@ const DashboardAdmin = () => {
         </div>
 
         <div className="mt-4 text-center py-8 bg-gray-50 rounded-lg">
-          <p className="text-gray-600">Aqui você pode gerenciar os fretes da plataforma</p>
-          <p className="text-sm text-gray-500 mt-2">Utilize o botão acima para criar um novo frete</p>
+          <p className="text-sm text-gray-500">
+            Utilize o botão acima para criar um novo frete
+          </p>
         </div>
       </div>
     </div>

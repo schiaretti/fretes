@@ -23,30 +23,29 @@ function App() {
             {/* Rotas públicas */}
             <Route path='/cadastro-usuario' element={<Cadastro />} />
             <Route path='/' element={<Login />} />
-            
-            {/* Rota de logística (layout principal) */}
+
+            {/* Rota de Dashboard Admin (separada) */}
+            <Route path='/admin' element={
+              <PrivateRoute adminOnly={true}>
+                <DashboardAdmin />
+              </PrivateRoute>
+            } />
+
             <Route path='/logistica' element={
-              <PrivateRoute>
+              <PrivateRoute allowAdminAccess={true}>  
                 <Logistica />
               </PrivateRoute>
             }>
               {/* Sub-rotas */}
+              <Route index element={<Navigate to="fretes" replace />} />
               <Route path='fretes' element={<ListagemFretes />} />
               <Route path='veiculos' element={<ListagemVeiculos />} />
               <Route path='cadastro-veiculo' element={<CadastroVeiculo />} />
               <Route path='novo-frete' element={<NovoFrete />} />
-              
-              {/* Rota privada para usuários com nível ADMIN */}
-              <Route path='admin' element={
-                <PrivateRoute adminOnly={true}>
-                  <DashboardAdmin />
-                  <NovoFrete />
-                </PrivateRoute>
-              } />
-              <Route index element={<Navigate to="fretes" replace />} />
             </Route>
-            
-            <Route path='*' element={<Navigate to="/" />} />
+
+            {/* Redirecionamento para páginas não encontradas */}
+            <Route path='*' element={<Navigate to="/" replace />} />
           </Routes>
         </main>
       </AuthProvider>

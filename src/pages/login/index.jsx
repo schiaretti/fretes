@@ -21,7 +21,7 @@ function Login() {
 
     try {
       await login(email, senha)
-      navigate("/logistica")
+      navigate("/admin", { replace: true }) // Redireciona para o dashboard admin após login
     } catch (err) {
       console.error("Erro ao fazer login:", err)
       alert(err.response?.data?.message || "Usuário ou senha inválidos!")

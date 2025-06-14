@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 
 const NovoFrete = () => {
+   console.log('Componente NovoFrete renderizado!')
   const [frete, setFrete] = useState({
     origemCidade: '',
     origemEstado: '',

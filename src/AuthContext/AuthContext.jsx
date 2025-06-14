@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from 'react'
 import api from '../services/api'
 import {jwtDecode} from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
 
 const AuthContext = createContext()
 
@@ -31,6 +32,8 @@ export const AuthProvider = ({ children }) => {
       throw error
     }
   }
+
+  
 
   const logout = () => {
     localStorage.removeItem('token')

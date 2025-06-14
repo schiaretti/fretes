@@ -4,6 +4,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: 'https://sauloapi-production-e85a.up.railway.app/api',
   withCredentials: true,
+  timeout: 5000, // Tempo limite de 5 segundos
   headers: {
     'Content-Type': 'application/json'
   }
